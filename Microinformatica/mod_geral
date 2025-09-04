@@ -7,35 +7,31 @@ Public id_conta, cont_linhas, id_produto As Integer
 Public sheet, ultimaSheet As String
 
 Function atualizar_status()
-
-
-    
     Dim cont As Integer
     Dim ativo, nome As String
     Dim fundo, fonte As Integer
-    fonte = 2
+    
     cont = 11
     Do While Range("G" & cont).Value <> ""
         ativo = Range("G" & cont).Value
             
-        If Not ativo = "ATIVA" And Not Selection.Interior.Color = 4 Then
+        If Not ativo = "ATIVA" And Not Selection.Interior.ColorIndex = 4 Then
             nome = "ATIVA"
             fundo = 4
+            fonte = 1
         Else
             nome = "BLOQUEADA"
-            fundo = 3 'cor de fundo
+            fundo = 3
+            fonte = 2
         End If
-            Range("G" & cont).Select
-            cont = cont + 1
-        Loop
             
-            Selection.Value = nome
-            Selection.Interior.Color = fundo  'cor de fundo
-            Selection.Font.ColorIndex = fonte 'fonte
-    
+		cont = cont + 1
+		Range("G" & cont).Select
+		Selection.Value = nome
+		Selection.Interior.ColorIndex = fundo
+		Selection.Font.ColorIndex = fonte
+	Loop
         
-        
-            
             
 
 End Function
