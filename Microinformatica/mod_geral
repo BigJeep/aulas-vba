@@ -1,0 +1,141 @@
+Public resp, usuario, email, senha, produto, departamento As String
+Public preco As Double
+Public cont As Integer
+Public audio As Object
+Public id_conta, cont_linhas, id_produto As Integer
+
+Public sheet, ultimaSheet As String
+
+Function atualizar_status()
+
+
+    
+    Dim cont As Integer
+    Dim ativo, nome As String
+    Dim fundo, fonte As Integer
+    fonte = 2
+    cont = 11
+    Do While Range("G" & cont).Value <> ""
+        ativo = Range("G" & cont).Value
+            
+        If Not ativo = "ATIVA" And Not Selection.Interior.Color = 4 Then
+            nome = "ATIVA"
+            fundo = 4
+        Else
+            nome = "BLOQUEADA"
+            fundo = 3 'cor de fundo
+        End If
+            Range("G" & cont).Select
+            cont = cont + 1
+        Loop
+            
+            Selection.Value = nome
+            Selection.Interior.Color = fundo  'cor de fundo
+            Selection.Font.ColorIndex = fonte 'fonte
+    
+        
+        
+            
+            
+
+End Function
+
+Function limpar_cad_contas()
+    With frm_cad_contas
+        .txt_usuario = Empty
+        .txt_email = Empty
+        .txt_senha = Empty
+        .txt_senha_confirmar = Empty
+        .cmb_tipo_conta.ListIndex = -1
+        .txt_usuario.SetFocus
+    End With
+    
+End Function
+
+Function criar_contas()
+    frm_cad_contas.Show
+    
+End Function
+
+Function criar_produtos()
+    frm_cad_produtos.Show
+    
+End Function
+
+
+Function encerrar_conta()
+    resp = MsgBox("deseja realmente encerrar" + vbNewLine & _
+    "a sessão da conta?", vbquesiton + vbYesNo, "ATENCAO") '_ quebra a linha
+    
+    If resp = vbYes Then
+        Application.Visible = False
+        frm_login.Show
+    End If
+    
+    
+End Function
+
+Function chamar_subtotal()
+    sheet = "SUBTOTAL"
+    ultimaSheet = "OPERACIONAL"
+    Sheets(sheet).Select
+End Function
+
+Function chamar_consolidar()
+    sheet = "CONSOLIDAR"
+    ultimaSheet = "OPERACIONAL"
+    Sheets(sheet).Select
+End Function
+
+Function chamar_tabDinamica()
+    sheet = "TAB_DINAMICA"
+    ultimaSheet = "OPERACIONAL"
+    Sheets(sheet).Select
+    
+End Function
+
+Function chamar_grafico()
+    sheet = "GRAFICO"
+    ultimaSheet = "OPERACIONAL"
+    Sheets(sheet).Select
+    
+End Function
+
+Function planilhaAnterior()
+    Sheets(ultimaSheet).Select
+    
+End Function
+
+Function chamar_pedidos()
+    frm_pedidos.Show
+
+End Function
+
+
+Function carregar_voz()
+    Set audio = CreateObject("SAPI.SPVOICE")
+    audio.volume = 100
+    audio.Rate = 1
+    
+End Function
+
+Function btn_sairExcel()
+    resp = MsgBox("Deseja realmente sair?", vbExclamation + vbYesNo, "Atenção")
+    If resp = vbYes Then
+        ActiveWorkbook.Save
+        Application.Quit
+    Else
+        Call carregar_voz
+        audio.Speak ("Que bom que ficou")
+        'MsgBox ("legal"), vbInformation + vbOKOnly, "AVISO"
+                    
+    
+    End If
+    
+        
+    
+    
+    ' frm_sairExcel.Show
+    
+End Function
+
