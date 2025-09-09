@@ -83,7 +83,7 @@ End Function
 
 Function encerrar_conta()
     resp = MsgBox("deseja realmente encerrar" + vbNewLine & _
-    "a sess„o da conta?", vbquesiton + vbYesNo, "ATENCAO") '_ quebra a linha
+    "a sess√£o da conta?", vbquesiton + vbYesNo, "ATENCAO") '_ quebra a linha
     
     If resp = vbYes Then
         Application.Visible = False
@@ -142,7 +142,7 @@ Function carregar_voz()
 End Function
 
 Function btn_sairExcel()
-    resp = MsgBox("Deseja realmente sair?", vbExclamation + vbYesNo, "AtenÁ„o")
+    resp = MsgBox("Deseja realmente sair?", vbExclamation + vbYesNo, "Aten√ß√£o")
     If resp = vbYes Then
         ActiveWorkbook.Save
         Application.Quit
