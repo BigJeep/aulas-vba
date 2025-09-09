@@ -1,0 +1,42 @@
+VERSION 5.00
+Begin {C62A69F0-16DC-11CE-9E98-00AA00574A4F} frm_pedidos 
+   Caption         =   "CADASTRO DE PEDIDOS"
+   ClientHeight    =   8020
+   ClientLeft      =   120
+   ClientTop       =   465
+   ClientWidth     =   12270
+   OleObjectBlob   =   "frm_pedidos.frx":0000
+   StartUpPosition =   2  'CenterScreen
+End
+Attribute VB_Name = "frm_pedidos"
+Attribute VB_GlobalNameSpace = False
+Attribute VB_Creatable = False
+Attribute VB_PredeclaredId = True
+Attribute VB_Exposed = False
+
+
+Private Sub txt_cpf_KeyPress(ByVal KeyAscii As MSForms.ReturnInteger)
+'999.999.999-99
+
+If Len(txt_cpf) = 14 Then
+   KeyAscii = 0
+ElseIf Len(txt_cpf) = 3 Or Len(txt_cpf) = 7 Then
+   txt_cpf = txt_cpf & "."
+ElseIf Len(txt_cpf) = 11 Then
+   txt_cpf = txt_cpf & "-"
+End If
+End Sub
+
+
+Private Sub txt_rg_KeyPress(ByVal KeyAscii As MSForms.ReturnInteger)
+'99.999.999-9
+
+If Len(txt_rg) = 12 Then
+   KeyAscii = 0
+ElseIf Len(txt_rg) = 2 Or Len(txt_rg) = 6 Then
+   txt_rg = txt_rg & "."
+ElseIf Len(txt_rg) = 10 Then
+   txt_rg = txt_rg & "-"
+End If
+
+End Sub

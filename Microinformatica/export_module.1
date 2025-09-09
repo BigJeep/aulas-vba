@@ -1,0 +1,23 @@
+Attribute VB_Name = "export_module"
+'copiei da IA, depois vejo com calma
+
+Sub ExportAllVBAComponents()
+    Dim vbComp As Object
+    Dim exportPath As String
+    Dim projectName As String
+    
+    exportPath = "C:\Users\BigJeep\Desktop\pasta dele\Fatec São Caetano\Microinformatica - Humberto\exports para GitHub\Planilha Aulas 01\" ' Make sure to include the trailing backslash
+    projectName = ThisWorkbook.Name
+    
+    If Dir(exportPath, vbDirectory) = "" Then
+        MsgBox "The specified export path does not exist.", vbExclamation
+        Exit Sub
+    End If
+    
+    
+    For Each vbComp In ThisWorkbook.VBProject.VBComponents
+        vbComp.Export exportPath & vbComp.Name & "." & vbComp.Type
+    Next vbComp
+    
+    MsgBox "Export completed for project: " & projectName, vbInformation
+End Sub

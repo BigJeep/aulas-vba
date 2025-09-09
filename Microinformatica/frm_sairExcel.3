@@ -1,0 +1,24 @@
+VERSION 5.00
+Begin {C62A69F0-16DC-11CE-9E98-00AA00574A4F} frm_sairExcel 
+   Caption         =   "Atenção"
+   ClientHeight    =   1360
+   ClientLeft      =   105
+   ClientTop       =   450
+   ClientWidth     =   2565
+   OleObjectBlob   =   "frm_sairExcel.frx":0000
+   StartUpPosition =   1  'CenterOwner
+End
+Attribute VB_Name = "frm_sairExcel"
+Attribute VB_GlobalNameSpace = False
+Attribute VB_Creatable = False
+Attribute VB_PredeclaredId = True
+Attribute VB_Exposed = False
+Private Sub btn_sim_Click()
+    ActiveWorkbook.Save
+    ActiveWorkbook.Close
+    
+End Sub
+
+Private Sub Label1_Click()
+    Hide.frm_sairExcel
+End Sub

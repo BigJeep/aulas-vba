@@ -1,0 +1,113 @@
+VERSION 5.00
+Begin {C62A69F0-16DC-11CE-9E98-00AA00574A4F} frm_cad_contas 
+   Caption         =   "Criar Usuario"
+   ClientHeight    =   4125
+   ClientLeft      =   105
+   ClientTop       =   450
+   ClientWidth     =   6360
+   OleObjectBlob   =   "frm_cad_contas.frx":0000
+   StartUpPosition =   2  'CenterScreen
+End
+Attribute VB_Name = "frm_cad_contas"
+Attribute VB_GlobalNameSpace = False
+Attribute VB_Creatable = False
+Attribute VB_PredeclaredId = True
+Attribute VB_Exposed = False
+Private message As String
+Private Sub btn_criar_Click()
+    
+    'checar vazios
+    If _
+    Trim(txt_usuario) = "" Or _
+    Trim(txt_email) = "" Or _
+    txt_senha = "" Or _
+    txt_senha_confirmar = "" Or _
+    cmb_tipo_conta.ListIndex = -1 _
+    Then
+        message = MsgBox("Um ou mais campos não preenchidos", vbExclamation, "Atenção")
+        Exit Sub
+    End If
+    
+    'checa email
+    Dim regex As Object
+    Set regex = CreateObject("VBScript.RegExp")
+    regex.Pattern = "@"
+    regex.Pattern = ".*[a-zA-Z0-9]@*[a-zA-Z0-9]\.com"
+    If Not regex.test(Trim(txt_email)) Then
+        message = MsgBox("digite um endereço de e-mail válido", vbExclamation, "Atenção")
+        Exit Sub
+    End If
+    
+    'checa criterio senha
+    
+    'minhas tentativas anteriores
+    'regex.Pattern = "[a-z]+[A-Z]+[0-9]+[\.|\,|\*|\&|\%|\$|\#|\@|\!|\?|\\|\(|\)|\[\]\[}\[{\/]+"
+    'regex.Pattern = "(?=[a-z]*)(?=[A-Z]*)(?=[0-9]*)(?=[\.|\,|\*|\&amp;|\%|\$|\#|\@|\!|\?|\\|\(|\)|\[\]\[}\[{\/]*)"
+    'regex.Pattern = "(?=[a-z]+[A-Z]+[0-9]+[\.|\,|\*|\&amp;|\%|\$|\#|\@|\!|\?|\\|\(|\)|\[\]\[}\[{\/]+)"
+    
+    regex.Pattern = "(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+[\]{};':""\\|,.<>?\/~`])"
+    
+    If Not regex.test(Trim(txt_senha)) Then
+       message = MsgBox("crie uma senha com pelo menos uma letra maiuscula, uma minuscula, um numero e um caráter especial", vbExclamation, "Atenção")
+       Exit Sub
+    End If
+    
+    
+    'checa senhas iguais
+    If txt_senha.Value <> txt_senha_confirmar Then
+        message = MsgBox("senhas não estão iguais", vbExclamation, "Atenção")
+        Exit Sub
+    End If
+    
+    Sheets("CONTAS_LOGIN").Select
+    
+    cont_linhas = 11
+    id_conta = 1
+    Do While Range("B" & cont_linhas).Value <> ""
+        usuario = Range("C" & cont_linhas).Value
+        email = Range("D" & cont_linhas).Value
+        If txt_usuario = usuario Or txt_email = email Then
+            message = MsgBox("usuario já cadastrado!", vbExclamation, "Atenção")
+            Exit Sub
+        End If
+        cont_linhas = cont_linhas + 1
+        id_conta = id_conta + 1
+    Loop
+        Range("B" & cont_linhas).Value = id_conta
+        Range("C" & cont_linhas).Value = txt_usuario
+        Range("D" & cont_linhas).Value = txt_email
+        Range("E" & cont_linhas).Value = txt_senha
+        Range("F" & cont_linhas).Value = cmb_tipo_conta
+        Range("G" & cont_linhas).Select
+        Selection.Interior.ColorIndex = 10 'cor de fundo
+        Selection.Font.ColorIndex = 2 'fonte
+        
+        
+        Range("G" & cont_linhas).Value = "ATIVA"
+    
+    resp = MsgBox("Conta criada com sucesso!" + vbNewLine & "Deseja criar uma nova conta?", vbQuestion + vbYesNo, "ATENÇÃO")
+    
+    
+    If resp = vbYes Then
+        Call limpar_cad_contas
+    Else
+        Unload Me
+    End If
+    
+    
+End Sub
+
+Private Sub chk_visualizar_Click()
+    If chk_visualizar.Value = True Then
+    txt_senha.PasswordChar = ""
+    txt_senha_confirmar.PasswordChar = ""
+    Else
+    txt_senha.PasswordChar = "•"
+    txt_senha_confirmar.PasswordChar = "•"
+    End If
+    
+End Sub
+
+Sub UserForm_Initialize()
+  cmb_tipo_conta.List = Array("Administrador", "Operacional", "Outro")
+End Sub

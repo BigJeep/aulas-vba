@@ -1,0 +1,91 @@
+VERSION 5.00
+Begin {C62A69F0-16DC-11CE-9E98-00AA00574A4F} frm_cad_produtos 
+   Caption         =   "Criar Usuario"
+   ClientHeight    =   4125
+   ClientLeft      =   105
+   ClientTop       =   450
+   ClientWidth     =   6360
+   OleObjectBlob   =   "frm_cad_produtos.frx":0000
+   StartUpPosition =   2  'CenterScreen
+End
+Attribute VB_Name = "frm_cad_produtos"
+Attribute VB_GlobalNameSpace = False
+Attribute VB_Creatable = False
+Attribute VB_PredeclaredId = True
+Attribute VB_Exposed = False
+Private Sub btn_criar_produto_Click()
+    
+    'checar vazios
+    If _
+    Trim(txt_produto) = "" Or _
+    Trim(txt_valor) = "" Or _
+    Trim(cmb_departamento) = "" Or _
+    cmb_departamento.ListIndex = -1 _
+    Then
+        message = MsgBox("Um ou mais campos não preenchidos", vbExclamation, "Atenção")
+        Exit Sub
+    End If
+    '//
+    
+    
+    'checar produtos repetidos
+    Sheets("PRODUTOS_PEDIDOS").Select
+    cont_linhas = 11
+    Do While Range("B" & cont_linhas).Value <> ""
+        produto = Range("C" & cont_linhas).Value
+            If txt_produto = produto Then
+                message = MsgBox("produto já cadastrado!", vbExclamation, "Atenção")
+                Exit Sub
+            End If
+        
+        cont_linhas = cont_linhas + 1
+    Loop
+    '//
+    
+    'Estiliza/Formata
+    For i = 2 To 5 'colunas B para E
+        Cells(12, i).Copy  'copia a formatação da de cima
+        Cells(cont_linhas, i).PasteSpecial Paste:=xlPasteFormats 'cola a formatação
+        Cells(cont_linhas, i).NumberFormat = FormatCurrency
+        'Cells(cont_linhas, i).NumberFormat = Cells(12, i).NumberFormat  'coloca o mesmo tipo de dado
+    Next i
+    Application.CutCopyMode = False 'limpa clipboard
+    '//
+    
+    'Adiciona valores
+    Range("B" & cont_linhas).Value = id_produto + 1
+    Range("C" & cont_linhas).Value = txt_produto
+    Range("D" & cont_linhas).Value = txt_valor
+    Range("E" & cont_linhas).Value = cmb_departamento
+    
+    
+    
+    
+    
+    respresp = MsgBox("Produto adicionado com sucesso!" + vbNewLine & "Deseja deseja adicionar outro?", vbQuestion + vbYesNo, "ATENÇÃO")
+    If resp = vbYes Then
+        Call limpar_cad_produtos
+        
+    Else
+        Unload Me
+    End If
+    
+
+End Sub
+
+
+Sub UserForm_Initialize()
+    Call set_id_produto
+    With lbl_id
+        .Font.Size = 18
+        .Font.Bold = True
+    End With
+    lbl_id.Caption = id_produto + 1
+    cmb_departamento.List = Array("Informática", "Telefonia", "Eletrônicos")
+End Sub
+
+
+
+
+
+
